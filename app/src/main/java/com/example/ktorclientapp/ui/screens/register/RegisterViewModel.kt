@@ -30,7 +30,7 @@ class RegisterViewModel(
                     User(
                         name = nombre.trim(),
                         email = correo.trim(),
-//                        password = contrasena.toMd5()
+                        password = contrasena
                     )
                 )
                 alExito()

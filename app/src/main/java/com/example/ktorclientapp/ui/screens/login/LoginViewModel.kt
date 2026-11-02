@@ -25,11 +25,9 @@ class LoginViewModel(
             _error.value = null
 
             try {
-//                val hash = contrasena.toMd5()
-
                 // PROVISIONAL: se comprueba aquí porque el servidor aún no tiene /login
                 val usuario = repositorio.getUsers()
-//                    .firstOrNull { it.email == correo.trim() && it.password == hash }
+                    .find { it.email == correo.trim() && it.password == contrasena }
 
                 if (usuario != null) {
                     alExito()

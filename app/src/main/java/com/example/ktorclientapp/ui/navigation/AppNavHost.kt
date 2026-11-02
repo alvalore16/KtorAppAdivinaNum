@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.ktorclientapp.ui.screens.main.MainScreen
 import com.example.ktorclientapp.ui.screens.login.LoginScreen
+import com.example.ktorclientapp.ui.screens.main.MainScreen
 import com.example.ktorclientapp.ui.screens.register.RegisterScreen
 
 object Rutas {
