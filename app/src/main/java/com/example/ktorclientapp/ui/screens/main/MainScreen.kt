@@ -1,36 +1,70 @@
 package com.example.ktorclientapp.ui.screens.main
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
+import com.example.ktorclientapp.R
+import com.example.ktorclientapp.ui.screens.juego.JuegoScreen
 
 @Composable
-fun MainScreen(
-    alCerrarSesion: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("Sesión iniciada")
+fun MainScreen(alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
+    var pestana by remember { mutableStateOf(0) }
 
-        Spacer(Modifier.height(16.dp))
-
-        Button(onClick = alCerrarSesion) {
-            Text("Cerrar sesión")
+    Scaffold(
+        modifier = modifier,
+        bottomBar = {
+            NavigationBar {
+                NavigationBarItem(
+                    selected = pestana == 0,
+                    onClick = { pestana = 0 },
+                    icon = { Icon(painter = painterResource(R.drawable.ic_jugar), contentDescription = "Jugar") },
+                    label = { Text("Jugar") }
+                )
+                NavigationBarItem(
+                    selected = pestana == 1,
+                    onClick = { pestana = 1 },
+                    icon = { Icon(painter = painterResource(R.drawable.ic_ranking), contentDescription = "Ranking") },
+                    label = { Text("Ranking") }
+                )
+                NavigationBarItem(
+                    selected = pestana == 2,
+                    onClick = { pestana = 2 },
+                    icon = { Icon(painter = painterResource(R.drawable.ic_perfil), contentDescription = "Perfil") },
+                    label = { Text("Perfil") }
+                )
+            }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            if (pestana == 0) {
+                JuegoScreen()
+            }
+            if (pestana == 1) {
+                Text("Aquí irá el ranking")
+            }
+            if (pestana == 2) {
+                Text("Aquí irá el perfil")
+                Button(onClick = alCerrarSesion) {
+                    Text("Cerrar sesión")
+                }
+            }
         }
     }
 }
