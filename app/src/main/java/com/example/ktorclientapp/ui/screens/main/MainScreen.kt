@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ktorclientapp.R
+import com.example.ktorclientapp.ui.screens.viewAdmin.AdminScreen
+import com.example.ktorclientapp.ui.screens.viewAdmin.AdminViewModel
 import com.example.ktorclientapp.ui.screens.viewUser.juego.JuegoScreen
 import com.example.ktorclientapp.ui.screens.viewUser.perfil.ImageViewModel
 import com.example.ktorclientapp.ui.screens.viewUser.perfil.ImageViewModelFactory
@@ -28,10 +30,11 @@ import com.example.ktorclientapp.ui.screens.viewUser.ranking.RankingScreen
 import com.example.ktorclientapp.ui.screens.viewUser.ranking.RankingViewModel
 
 @Composable
-fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
+fun MainScreen(idUser: Int, rol: String, alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
     var pestana by remember { mutableStateOf(0) }
     val perfilViewModel: PerfilViewModel = viewModel()
     val rankingViewModel: RankingViewModel = viewModel()
+    val adminViewModel: AdminViewModel = viewModel()
     val contexto = LocalContext.current
     val imageViewModel: ImageViewModel = viewModel(
         factory = ImageViewModelFactory(contexto.applicationContext as Application)
@@ -65,6 +68,17 @@ fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Mod
                     icon = { Icon(painter = painterResource(R.drawable.ic_perfil), contentDescription = "Perfil") },
                     label = { Text("Perfil") }
                 )
+                if (rol == "ADMIN") {
+                    NavigationBarItem(
+                        selected = pestana == 3,
+                        onClick = {
+                            pestana = 3
+                            adminViewModel.cargarUsuarios()
+                        },
+                        icon = { Icon(painter = painterResource(R.drawable.ic_admin), contentDescription = "Admin") },
+                        label = { Text("Admin") }
+                    )
+                }
             }
         }
     ) { innerPadding ->
@@ -86,6 +100,9 @@ fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Mod
                     imageViewModel = imageViewModel,
                     alCerrarSesion = alCerrarSesion
                 )
+            }
+            if (pestana == 3) {
+                AdminScreen(idUser = idUser, viewModel = adminViewModel)
             }
         }
     }

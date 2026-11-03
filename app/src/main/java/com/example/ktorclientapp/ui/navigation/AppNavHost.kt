@@ -17,10 +17,10 @@ object Rutas {
     const val INICIO_SESION = "inicioSesion"
     const val REGISTRO = "registro"
     const val RECUPERAR = "recuperar"
-    const val PRINCIPAL = "principal/{idUser}"
+    const val PRINCIPAL = "principal/{idUser}/{rol}"
 
-    fun principal(idUser: Int): String {
-        return "principal/$idUser"
+    fun principal(idUser: Int, rol: String): String {
+        return "principal/$idUser/$rol"
     }
 }
 
@@ -36,8 +36,8 @@ fun AppNavHost(
     ) {
         composable(Rutas.INICIO_SESION) {
             LoginScreen(
-                alIniciarSesion = { idUser ->
-                    navController.navigate(Rutas.principal(idUser)) {
+                alIniciarSesion = { idUser, rol ->
+                    navController.navigate(Rutas.principal(idUser, rol)) {
                         popUpTo(Rutas.INICIO_SESION) { inclusive = true }
                     }
                 },
@@ -65,15 +65,24 @@ fun AppNavHost(
 
         composable(
             route = Rutas.PRINCIPAL,
-            arguments = listOf(navArgument("idUser") { type = NavType.IntType })
+            arguments = listOf(
+                navArgument("idUser") { type = NavType.IntType },
+                navArgument("rol") { type = NavType.StringType }
+            )
         ) { entrada ->
             val argumentos = entrada.arguments
             var idUser = 0
+            var rol = "GAMER"
             if (argumentos != null) {
                 idUser = argumentos.getInt("idUser")
+                val rolRecibido = argumentos.getString("rol")
+                if (rolRecibido != null) {
+                    rol = rolRecibido
+                }
             }
             MainScreen(
                 idUser = idUser,
+                rol = rol,
                 alCerrarSesion = {
                     navController.navigate(Rutas.INICIO_SESION) {
                         popUpTo(Rutas.PRINCIPAL) { inclusive = true }

@@ -64,3 +64,8 @@ data class RankingItem(
 data class RecuperarPassword(
     val email: String = ""
 )
+
+@Serializable
+data class CambioRol(
+    val rol: String = ""
+)

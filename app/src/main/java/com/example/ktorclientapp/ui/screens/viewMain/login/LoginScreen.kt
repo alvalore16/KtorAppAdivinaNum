@@ -27,7 +27,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun LoginScreen(
-    alIniciarSesion: (Int) -> Unit,
+    alIniciarSesion: (Int, String) -> Unit,
     irRegistro: () -> Unit,
     irRecuperar: () -> Unit,
     modifier: Modifier = Modifier,

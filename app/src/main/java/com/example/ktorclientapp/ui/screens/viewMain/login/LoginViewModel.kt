@@ -19,7 +19,7 @@ class LoginViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
-    fun iniciarSesion(correo: String, contrasena: String, alExito: (Int) -> Unit) {
+    fun iniciarSesion(correo: String, contrasena: String, alExito: (Int, String) -> Unit) {
         viewModelScope.launch {
             _cargando.value = true
             _error.value = null
@@ -30,7 +30,7 @@ class LoginViewModel(
                     .find { it.email == correo.trim() && it.password == contrasena.toMd5() }
 
                 if (usuario != null) {
-                    alExito(usuario.idUser)
+                    alExito(usuario.idUser, usuario.rol)
                 } else {
                     _error.value = "Correo o contraseña incorrectos"
                 }

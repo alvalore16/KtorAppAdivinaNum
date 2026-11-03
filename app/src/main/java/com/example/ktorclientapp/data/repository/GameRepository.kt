@@ -2,6 +2,7 @@ package com.example.ktorclientapp.data.repository
 
 import com.example.ktorclientapp.data.model.CambioFoto
 import com.example.ktorclientapp.data.model.CambioPassword
+import com.example.ktorclientapp.data.model.CambioRol
 import com.example.ktorclientapp.data.model.Games
 import com.example.ktorclientapp.data.model.RankingItem
 import com.example.ktorclientapp.data.model.RespuestaIntento
@@ -30,4 +31,12 @@ class GameRepository(
     suspend fun cambiarFoto(idUser: Int, cambio: CambioFoto) = apiService.cambiarFoto(idUser, cambio)
 
     suspend fun recuperarPassword(email: String) = apiService.recuperarPassword(email)
+
+    suspend fun crearUsuarioAdmin(user: User) = apiService.crearUsuarioAdmin(user)
+
+    suspend fun editarUsuario(idUser: Int, user: User) = apiService.editarUsuario(idUser, user)
+
+    suspend fun cambiarRol(idUser: Int, cambio: CambioRol) = apiService.cambiarRol(idUser, cambio)
+
+    suspend fun borrarUsuario(idUser: Int) = apiService.borrarUsuario(idUser)
 }

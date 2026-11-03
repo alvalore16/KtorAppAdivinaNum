@@ -2,6 +2,7 @@ package com.example.ktorclientapp.data.remote
 
 import com.example.ktorclientapp.data.model.CambioFoto
 import com.example.ktorclientapp.data.model.CambioPassword
+import com.example.ktorclientapp.data.model.CambioRol
 import com.example.ktorclientapp.data.model.Games
 import com.example.ktorclientapp.data.model.Intento
 import com.example.ktorclientapp.data.model.RankingItem
@@ -10,6 +11,7 @@ import com.example.ktorclientapp.data.model.RespuestaIntento
 import com.example.ktorclientapp.data.model.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.put
@@ -67,5 +69,30 @@ class GameApiService(
             contentType(ContentType.Application.Json)
             setBody(RecuperarPassword(email))
         }
+    }
+
+    suspend fun crearUsuarioAdmin(user: User) {
+        client.post("$baseUrl/admin/usuarios") {
+            contentType(ContentType.Application.Json)
+            setBody(user)
+        }
+    }
+
+    suspend fun editarUsuario(idUser: Int, user: User) {
+        client.put("$baseUrl/usuarios/$idUser") {
+            contentType(ContentType.Application.Json)
+            setBody(user)
+        }
+    }
+
+    suspend fun cambiarRol(idUser: Int, cambio: CambioRol) {
+        client.put("$baseUrl/usuarios/$idUser/rol") {
+            contentType(ContentType.Application.Json)
+            setBody(cambio)
+        }
+    }
+
+    suspend fun borrarUsuario(idUser: Int) {
+        client.delete("$baseUrl/usuarios/$idUser")
     }
 }
