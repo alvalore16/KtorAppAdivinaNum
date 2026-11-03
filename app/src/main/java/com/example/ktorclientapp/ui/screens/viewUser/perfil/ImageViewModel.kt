@@ -12,15 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-/**
- *
- * ImageViewModel.kt coordina la interfaz y el repositorio. Mantiene cuatro estados:
- *
- * imageUri: imagen seleccionada o fotografiada.
- * isUploading: indica si la subida está en curso.
- * message: mensaje de estado para el usuario.
- * uploadedImageUrl: URL devuelta por Cloudinary.
- */
 class ImageViewModel(
     private val application: Application,
     private val imageRepository: ImageRepository
@@ -55,10 +46,6 @@ class ImageViewModel(
             _message.value = "Primero haz una foto o elige una imagen de la galeria"
             return
         }
-        /*
-        viewModelScope.launch permite ejecutar la operación de forma asíncrona y ligada al ciclo de vida del ViewModel.
-        La interfaz no se bloquea mientras se lee el archivo y se realiza la petición de red.
-         */
         viewModelScope.launch {
             _isUploading.value = true
             _message.value = "Subiendo imagen a Cloudinary..."

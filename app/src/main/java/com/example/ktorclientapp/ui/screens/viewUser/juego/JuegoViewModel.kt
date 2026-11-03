@@ -12,13 +12,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class JuegoViewModel(private val repositorio: GameRepository = GameRepository()) : ViewModel() {
+class JuegoViewModel(
+    private val repositorio: GameRepository = GameRepository()
+) : ViewModel() {
 
-    // null = no hay partida en pantalla
+    // La partida que se está jugando. Si es null, no hay ninguna en pantalla
     private val _partida = MutableStateFlow<Games?>(null)
     val partida: StateFlow<Games?> = _partida.asStateFlow()
 
-    // Pistas, resultados y errores se muestran en un único texto
+    // Aquí van las pistas, los resultados y los errores, todo en un solo texto
     private val _mensaje = MutableStateFlow("")
     val mensaje: StateFlow<String> = _mensaje.asStateFlow()
 
@@ -35,7 +37,7 @@ class JuegoViewModel(private val repositorio: GameRepository = GameRepository())
                 _mensaje.value = "Adivina el número"
             } catch (e: ClientRequestException) {
                 if (e.response.status == HttpStatusCode.Conflict) {
-                    // Ya tiene una partida sin terminar: se continúa con ella
+                    // Ya tenía una partida sin terminar, seguimos con esa
                     continuarPartida(idUser)
                 } else {
                     _mensaje.value = e.response.bodyAsText()
@@ -63,6 +65,7 @@ class JuegoViewModel(private val repositorio: GameRepository = GameRepository())
             return
         }
 
+        // Comprobamos que lo que ha escrito es un número
         val numero = texto.trim().toIntOrNull()
         if (numero == null) {
             _mensaje.value = "Introduce un número válido"
@@ -74,6 +77,7 @@ class JuegoViewModel(private val repositorio: GameRepository = GameRepository())
                 val respuesta = repositorio.enviarIntento(partidaActual.idGames, numero)
                 _partida.value = respuesta.partida
 
+                // El servidor es el que sabe el número, nosotros solo mostramos lo que dice
                 when (respuesta.resultado) {
                     "ACERTADO" -> _mensaje.value = "¡Has acertado!"
                     "PERDIDO" -> _mensaje.value = "Sin intentos. El número era ${respuesta.partida.numOculto}"
@@ -87,7 +91,7 @@ class JuegoViewModel(private val repositorio: GameRepository = GameRepository())
         }
     }
 
-    // Si la partida no estaba terminada, sigue guardada en el servidor
+    // Si la partida no estaba acabada, sigue guardada en el servidor
     fun salirDePartida() {
         _partida.value = null
         _mensaje.value = ""
