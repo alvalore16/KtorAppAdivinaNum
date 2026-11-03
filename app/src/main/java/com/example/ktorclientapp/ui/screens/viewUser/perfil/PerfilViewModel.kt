@@ -1,4 +1,4 @@
-package com.example.ktorclientapp.ui.screens.perfil
+package com.example.ktorclientapp.ui.screens.viewUser.perfil
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,6 +6,7 @@ import com.example.ktorclientapp.data.model.CambioFoto
 import com.example.ktorclientapp.data.model.CambioPassword
 import com.example.ktorclientapp.data.model.User
 import com.example.ktorclientapp.data.repository.GameRepository
+import com.example.ktorclientapp.ui.screens.viewMain.login.toMd5
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,7 +47,7 @@ class PerfilViewModel(
 
         viewModelScope.launch {
             try {
-                repositorio.cambiarPassword(idUser, CambioPassword(actual, nueva))
+                repositorio.cambiarPassword(idUser, CambioPassword(actual.toMd5(), nueva.toMd5()))
                 _mensaje.value = "Contraseña cambiada correctamente"
             } catch (e: ClientRequestException) {
                 _mensaje.value = e.response.bodyAsText()

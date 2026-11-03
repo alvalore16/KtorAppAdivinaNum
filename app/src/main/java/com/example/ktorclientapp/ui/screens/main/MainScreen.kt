@@ -19,13 +19,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ktorclientapp.R
-import com.example.ktorclientapp.ui.screens.juego.JuegoScreen
-import com.example.ktorclientapp.ui.screens.perfil.ImageViewModel
-import com.example.ktorclientapp.ui.screens.perfil.ImageViewModelFactory
-import com.example.ktorclientapp.ui.screens.perfil.PerfilScreen
-import com.example.ktorclientapp.ui.screens.perfil.PerfilViewModel
-import com.example.ktorclientapp.ui.screens.ranking.RankingScreen
-import com.example.ktorclientapp.ui.screens.ranking.RankingViewModel
+import com.example.ktorclientapp.ui.screens.viewUser.juego.JuegoScreen
+import com.example.ktorclientapp.ui.screens.viewUser.perfil.ImageViewModel
+import com.example.ktorclientapp.ui.screens.viewUser.perfil.ImageViewModelFactory
+import com.example.ktorclientapp.ui.screens.viewUser.perfil.PerfilScreen
+import com.example.ktorclientapp.ui.screens.viewUser.perfil.PerfilViewModel
+import com.example.ktorclientapp.ui.screens.viewUser.ranking.RankingScreen
+import com.example.ktorclientapp.ui.screens.viewUser.ranking.RankingViewModel
 
 @Composable
 fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {

@@ -1,4 +1,4 @@
-package com.example.ktorclientapp.ui.screens.login
+package com.example.ktorclientapp.ui.screens.viewMain.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

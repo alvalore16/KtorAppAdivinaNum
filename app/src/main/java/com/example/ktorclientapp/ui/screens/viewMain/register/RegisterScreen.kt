@@ -1,4 +1,4 @@
-package com.example.ktorclientapp.ui.screens.register
+package com.example.ktorclientapp.ui.screens.viewMain.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

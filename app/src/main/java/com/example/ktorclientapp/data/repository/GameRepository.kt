@@ -28,4 +28,6 @@ class GameRepository(
     suspend fun cambiarPassword(idUser: Int, cambio: CambioPassword) = apiService.cambiarPassword(idUser, cambio)
 
     suspend fun cambiarFoto(idUser: Int, cambio: CambioFoto) = apiService.cambiarFoto(idUser, cambio)
+
+    suspend fun recuperarPassword(email: String) = apiService.recuperarPassword(email)
 }

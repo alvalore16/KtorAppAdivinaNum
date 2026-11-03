@@ -1,4 +1,4 @@
-package com.example.ktorclientapp.ui.screens.juego
+package com.example.ktorclientapp.ui.screens.viewUser.juego
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

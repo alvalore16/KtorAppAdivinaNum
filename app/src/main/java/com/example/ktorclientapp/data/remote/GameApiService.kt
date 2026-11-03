@@ -5,6 +5,7 @@ import com.example.ktorclientapp.data.model.CambioPassword
 import com.example.ktorclientapp.data.model.Games
 import com.example.ktorclientapp.data.model.Intento
 import com.example.ktorclientapp.data.model.RankingItem
+import com.example.ktorclientapp.data.model.RecuperarPassword
 import com.example.ktorclientapp.data.model.RespuestaIntento
 import com.example.ktorclientapp.data.model.User
 import io.ktor.client.HttpClient
@@ -58,6 +59,13 @@ class GameApiService(
         client.put("$baseUrl/usuarios/$idUser/foto") {
             contentType(ContentType.Application.Json)
             setBody(cambio)
+        }
+    }
+
+    suspend fun recuperarPassword(email: String) {
+        client.post("$baseUrl/recuperar-password") {
+            contentType(ContentType.Application.Json)
+            setBody(RecuperarPassword(email))
         }
     }
 }

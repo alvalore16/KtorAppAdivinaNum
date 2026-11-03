@@ -8,13 +8,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.ktorclientapp.ui.screens.login.LoginScreen
+import com.example.ktorclientapp.ui.screens.viewMain.login.LoginScreen
 import com.example.ktorclientapp.ui.screens.main.MainScreen
-import com.example.ktorclientapp.ui.screens.register.RegisterScreen
+import com.example.ktorclientapp.ui.screens.viewMain.recuperar.RecuperarScreen
+import com.example.ktorclientapp.ui.screens.viewMain.register.RegisterScreen
 
 object Rutas {
     const val INICIO_SESION = "inicioSesion"
     const val REGISTRO = "registro"
+    const val RECUPERAR = "recuperar"
     const val PRINCIPAL = "principal/{idUser}"
 
     fun principal(idUser: Int): String {
@@ -41,6 +43,9 @@ fun AppNavHost(
                 },
                 irRegistro = {
                     navController.navigate(Rutas.REGISTRO)
+                },
+                irRecuperar = {
+                    navController.navigate(Rutas.RECUPERAR)
                 }
             )
         }
@@ -48,6 +53,12 @@ fun AppNavHost(
         composable(Rutas.REGISTRO) {
             RegisterScreen(
                 alRegistrarse = { navController.popBackStack() },
+                alVolver = { navController.popBackStack() }
+            )
+        }
+
+        composable(Rutas.RECUPERAR) {
+            RecuperarScreen(
                 alVolver = { navController.popBackStack() }
             )
         }

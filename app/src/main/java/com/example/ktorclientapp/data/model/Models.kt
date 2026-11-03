@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class User(
     val idUser: Int = 0,
-    val rol: String = "gamer",
+    val rol: String = "GAMER",
     val name: String = "",
     val email: String = "",
     val password: String = "",
@@ -58,4 +58,9 @@ data class RankingItem(
     val jugadas: Int = 0,
     val ganadas: Int = 0,
     val porcentaje: Double = 0.0
+)
+
+@Serializable
+data class RecuperarPassword(
+    val email: String = ""
 )

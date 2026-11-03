@@ -1,4 +1,4 @@
-package com.example.ktorclientapp.ui.screens.juego
+package com.example.ktorclientapp.ui.screens.viewUser.juego
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

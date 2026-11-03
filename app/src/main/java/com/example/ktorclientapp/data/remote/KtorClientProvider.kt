@@ -12,7 +12,8 @@ import kotlinx.serialization.json.Json
 object KtorClientProvider {
 
     // IP del PC donde corre el servidor (en el emulador también vale http://10.0.2.2:8090)
-    const val BASE_URL = "http://192.168.209.44:8090"
+//    const val BASE_URL = "http://192.168.209.44:8090"
+    const val BASE_URL = "http://192.168.0.83:8090"
 
     val client: HttpClient by lazy {
         HttpClient(CIO) {

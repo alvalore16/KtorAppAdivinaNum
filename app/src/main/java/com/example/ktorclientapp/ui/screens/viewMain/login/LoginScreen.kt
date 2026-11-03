@@ -1,4 +1,4 @@
-package com.example.ktorclientapp.ui.screens.login
+package com.example.ktorclientapp.ui.screens.viewMain.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +12,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun LoginScreen(
     alIniciarSesion: (Int) -> Unit,
     irRegistro: () -> Unit,
+    irRecuperar: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = viewModel()
 ) {
@@ -39,6 +41,7 @@ fun LoginScreen(
         error = error,
         alEntrar = { correo, contrasena -> viewModel.iniciarSesion(correo, contrasena, alIniciarSesion) },
         irRegistro = irRegistro,
+        irRecuperar = irRecuperar,
         modifier = modifier
     )
 }
@@ -49,6 +52,7 @@ private fun LoginContenido(
     error: String?,
     alEntrar: (String, String) -> Unit,
     irRegistro: () -> Unit,
+    irRecuperar: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var correo by remember { mutableStateOf("") }
@@ -113,6 +117,13 @@ private fun LoginContenido(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Registro")
+        }
+
+        TextButton(
+            onClick = irRecuperar,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(text = "¿Has olvidado tu contraseña?")
         }
     }
 }

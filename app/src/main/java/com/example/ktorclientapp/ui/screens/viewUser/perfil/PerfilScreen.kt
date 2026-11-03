@@ -1,4 +1,4 @@
-package com.example.ktorclientapp.ui.screens.perfil
+package com.example.ktorclientapp.ui.screens.viewUser.perfil
 
 import android.Manifest
 import android.content.Context

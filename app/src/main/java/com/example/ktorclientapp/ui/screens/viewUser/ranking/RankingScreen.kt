@@ -1,4 +1,4 @@
-package com.example.ktorclientapp.ui.screens.ranking
+package com.example.ktorclientapp.ui.screens.viewUser.ranking
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

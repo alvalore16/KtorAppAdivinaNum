@@ -1,10 +1,12 @@
-package com.example.ktorclientapp.ui.screens.register
+package com.example.ktorclientapp.ui.screens.viewMain.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktorclientapp.data.model.User
 import com.example.ktorclientapp.data.repository.GameRepository
-import com.example.ktorclientapp.ui.screens.login.toMd5
+import com.example.ktorclientapp.ui.screens.viewMain.login.toMd5
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -47,6 +49,8 @@ class RegisterViewModel(
                     )
                 )
                 alExito()
+            } catch (e: ClientRequestException) {
+                _error.value = e.response.bodyAsText()
             } catch (e: Exception) {
                 _error.value = "No se pudo completar el registro"
             } finally {
