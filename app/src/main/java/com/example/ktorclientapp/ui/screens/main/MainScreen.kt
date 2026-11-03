@@ -20,7 +20,7 @@ import com.example.ktorclientapp.R
 import com.example.ktorclientapp.ui.screens.juego.JuegoScreen
 
 @Composable
-fun MainScreen(alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
+fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
     var pestana by remember { mutableStateOf(0) }
 
     Scaffold(
@@ -54,7 +54,7 @@ fun MainScreen(alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
                 .padding(innerPadding)
         ) {
             if (pestana == 0) {
-                JuegoScreen()
+                JuegoScreen(idUser = idUser)
             }
             if (pestana == 1) {
                 Text("Aquí irá el ranking")

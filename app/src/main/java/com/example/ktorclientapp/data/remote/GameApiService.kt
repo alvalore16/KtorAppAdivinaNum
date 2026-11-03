@@ -1,6 +1,8 @@
 package com.example.ktorclientapp.data.remote
 
 import com.example.ktorclientapp.data.model.Games
+import com.example.ktorclientapp.data.model.Intento
+import com.example.ktorclientapp.data.model.RespuestaIntento
 import com.example.ktorclientapp.data.model.User
 import com.example.ktorclientapp.data.model.UserWithGame
 import io.ktor.client.HttpClient
@@ -36,5 +38,20 @@ class GameApiService(
         client.post("$baseUrl/games") {
             contentType(ContentType.Application.Json)
             setBody(game)
+        }.body()
+
+    suspend fun crearPartida(partida: Games): Games =
+        client.post("$baseUrl/partidas") {
+            contentType(ContentType.Application.Json)
+            setBody(partida)
+        }.body()
+
+    suspend fun getPartidaActiva(idUser: Int): Games =
+        client.get("$baseUrl/usuarios/$idUser/partida-activa").body()
+
+    suspend fun enviarIntento(idPartida: Int, numero: Int): RespuestaIntento =
+        client.post("$baseUrl/partidas/$idPartida/intentos") {
+            contentType(ContentType.Application.Json)
+            setBody(Intento(numero))
         }.body()
 }

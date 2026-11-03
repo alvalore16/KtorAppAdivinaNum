@@ -1,6 +1,7 @@
 package com.example.ktorclientapp.data.repository
 
 import com.example.ktorclientapp.data.model.Games
+import com.example.ktorclientapp.data.model.RespuestaIntento
 import com.example.ktorclientapp.data.model.User
 import com.example.ktorclientapp.data.model.UserWithGame
 import com.example.ktorclientapp.data.remote.GameApiService
@@ -21,4 +22,11 @@ class GameRepository(
     suspend fun getGameById(id: Int): Games = apiService.getGameById(id)
 
     suspend fun createGame(game: Games): Games = apiService.createGame(game)
+
+    suspend fun crearPartida(partida: Games): Games = apiService.crearPartida(partida)
+
+    suspend fun getPartidaActiva(idUser: Int): Games = apiService.getPartidaActiva(idUser)
+
+    suspend fun enviarIntento(idPartida: Int, numero: Int): RespuestaIntento =
+        apiService.enviarIntento(idPartida, numero)
 }
