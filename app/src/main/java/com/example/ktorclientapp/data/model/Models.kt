@@ -53,3 +53,12 @@ data class UserWithGame(
     val name: String = "",
     val games: List<Games> = emptyList()
 )
+@Serializable
+data class RankingItem(
+    val idUser: Int = 0,
+    val name: String = "",
+    val foto: String = "",
+    val jugadas: Int = 0,
+    val ganadas: Int = 0,
+    val porcentaje: Double = 0.0
+)

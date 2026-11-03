@@ -4,6 +4,7 @@ import com.example.ktorclientapp.data.model.CambioFoto
 import com.example.ktorclientapp.data.model.CambioPassword
 import com.example.ktorclientapp.data.model.Games
 import com.example.ktorclientapp.data.model.Intento
+import com.example.ktorclientapp.data.model.RankingItem
 import com.example.ktorclientapp.data.model.RespuestaIntento
 import com.example.ktorclientapp.data.model.User
 import com.example.ktorclientapp.data.model.UserWithGame
@@ -20,6 +21,8 @@ class GameApiService(
     private val client: HttpClient = KtorClientProvider.client,
     private val baseUrl: String = KtorClientProvider.BASE_URL
 ) {
+    suspend fun getRanking(): List<RankingItem> = client.get("$baseUrl/ranking").body()
+
     suspend fun getUsers(): List<User> = client.get("$baseUrl/usuarios").body()
 
     suspend fun getUserById(id: Int): User = client.get("$baseUrl/usuarios/$id").body()

@@ -25,11 +25,14 @@ import com.example.ktorclientapp.ui.screens.perfil.ImageViewModel
 import com.example.ktorclientapp.ui.screens.perfil.ImageViewModelFactory
 import com.example.ktorclientapp.ui.screens.perfil.PerfilScreen
 import com.example.ktorclientapp.ui.screens.perfil.PerfilViewModel
+import com.example.ktorclientapp.ui.screens.ranking.RankingScreen
+import com.example.ktorclientapp.ui.screens.ranking.RankingViewModel
 
 @Composable
 fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
     var pestana by remember { mutableStateOf(0) }
     val perfilViewModel: PerfilViewModel = viewModel()
+    val rankingViewModel: RankingViewModel = viewModel()
     val contexto = LocalContext.current
     val imageViewModel: ImageViewModel = viewModel(
         factory = ImageViewModelFactory(contexto.applicationContext as Application)
@@ -47,7 +50,10 @@ fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Mod
                 )
                 NavigationBarItem(
                     selected = pestana == 1,
-                    onClick = { pestana = 1 },
+                    onClick = {
+                        pestana = 1
+                        rankingViewModel.cargarRanking()
+                              },
                     icon = { Icon(painter = painterResource(R.drawable.ic_ranking), contentDescription = "Ranking") },
                     label = { Text("Ranking") }
                 )
@@ -72,7 +78,7 @@ fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Mod
                 JuegoScreen(idUser = idUser)
             }
             if (pestana == 1) {
-                Text("Aquí irá el ranking")
+                RankingScreen(viewModel = rankingViewModel)
             }
             if (pestana == 2) {
                 PerfilScreen(

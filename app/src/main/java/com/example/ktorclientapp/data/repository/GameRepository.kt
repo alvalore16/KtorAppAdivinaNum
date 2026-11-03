@@ -3,6 +3,7 @@ package com.example.ktorclientapp.data.repository
 import com.example.ktorclientapp.data.model.CambioFoto
 import com.example.ktorclientapp.data.model.CambioPassword
 import com.example.ktorclientapp.data.model.Games
+import com.example.ktorclientapp.data.model.RankingItem
 import com.example.ktorclientapp.data.model.RespuestaIntento
 import com.example.ktorclientapp.data.model.User
 import com.example.ktorclientapp.data.model.UserWithGame
@@ -11,6 +12,8 @@ import com.example.ktorclientapp.data.remote.GameApiService
 class GameRepository(
     private val apiService: GameApiService = GameApiService()
 ) {
+    suspend fun getRanking(): List<RankingItem> = apiService.getRanking()
+
     suspend fun getUsers(): List<User> = apiService.getUsers()
 
     suspend fun getUserById(id: Int): User = apiService.getUserById(id)
