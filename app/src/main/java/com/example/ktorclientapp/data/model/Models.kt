@@ -69,3 +69,15 @@ data class RecuperarPassword(
 data class CambioRol(
     val rol: String = ""
 )
+
+@Serializable
+data class Login(
+    val email: String = "",
+    val password: String = ""
+)
+
+@Serializable
+data class RespuestaLogin(
+    val idUser: Int = 0,
+    val rol: String = ""
+)

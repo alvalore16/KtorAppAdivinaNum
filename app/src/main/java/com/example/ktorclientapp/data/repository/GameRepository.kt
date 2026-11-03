@@ -4,14 +4,18 @@ import com.example.ktorclientapp.data.model.CambioFoto
 import com.example.ktorclientapp.data.model.CambioPassword
 import com.example.ktorclientapp.data.model.CambioRol
 import com.example.ktorclientapp.data.model.Games
+import com.example.ktorclientapp.data.model.Login
 import com.example.ktorclientapp.data.model.RankingItem
 import com.example.ktorclientapp.data.model.RespuestaIntento
+import com.example.ktorclientapp.data.model.RespuestaLogin
 import com.example.ktorclientapp.data.model.User
 import com.example.ktorclientapp.data.remote.GameApiService
 
 class GameRepository(
     private val apiService: GameApiService = GameApiService()
 ) {
+    suspend fun login(correo: String, contrasena: String): RespuestaLogin = apiService.login(Login(correo, contrasena))
+
     suspend fun getRanking(): List<RankingItem> = apiService.getRanking()
 
     suspend fun getUsers(): List<User> = apiService.getUsers()

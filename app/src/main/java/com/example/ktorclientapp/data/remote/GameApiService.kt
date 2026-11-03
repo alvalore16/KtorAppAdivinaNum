@@ -5,9 +5,11 @@ import com.example.ktorclientapp.data.model.CambioPassword
 import com.example.ktorclientapp.data.model.CambioRol
 import com.example.ktorclientapp.data.model.Games
 import com.example.ktorclientapp.data.model.Intento
+import com.example.ktorclientapp.data.model.Login
 import com.example.ktorclientapp.data.model.RankingItem
 import com.example.ktorclientapp.data.model.RecuperarPassword
 import com.example.ktorclientapp.data.model.RespuestaIntento
+import com.example.ktorclientapp.data.model.RespuestaLogin
 import com.example.ktorclientapp.data.model.User
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -23,6 +25,13 @@ class GameApiService(
     private val client: HttpClient = KtorClientProvider.client,
     private val baseUrl: String = KtorClientProvider.BASE_URL
 ) {
+    // Login: mandamos correo y contraseña (en md5) y el servidor nos devuelve el id y el rol
+    suspend fun login(datos: Login): RespuestaLogin =
+        client.post("$baseUrl/login") {
+            contentType(ContentType.Application.Json)
+            setBody(datos)
+        }.body()
+
     suspend fun getRanking(): List<RankingItem> = client.get("$baseUrl/ranking").body()
 
     suspend fun getUsers(): List<User> = client.get("$baseUrl/usuarios").body()

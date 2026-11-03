@@ -3,6 +3,8 @@ package com.example.ktorclientapp.ui.screens.viewMain.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktorclientapp.data.repository.GameRepository
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,18 +28,9 @@ class LoginViewModel(
             _error.value = null
 
             try {
-                // Por ahora el servidor no tiene /login, así que traemos los usuarios
-                // y buscamos el que tenga ese correo y esa contraseña (en md5)
-                val usuarios = repositorio.getUsers()
-                val usuario = usuarios.find {
-                    it.email == correo.trim() && it.password == contrasena.toMd5()
-                }
-
-                if (usuario != null) {
-                    alExito(usuario.idUser, usuario.rol)
-                } else {
-                    _error.value = "Correo o contraseña incorrectos"
-                }
+                // La contraseña viaja ya en md5. El servidor comprueba y nos da el id y el rol
+                val respuesta = repositorio.login(correo.trim(), contrasena.toMd5())
+                alExito(respuesta.idUser, respuesta.rol)
             } catch (e: Exception) {
                 _error.value = "No se pudo conectar con el servidor"
             } finally {
