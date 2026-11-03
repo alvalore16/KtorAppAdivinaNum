@@ -44,7 +44,7 @@ fun RecuperarScreen(
     ) {
         Text(
             text = "Recuperar contraseña",
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineMedium
         )
 
         Spacer(modifier = Modifier.height(16.dp))

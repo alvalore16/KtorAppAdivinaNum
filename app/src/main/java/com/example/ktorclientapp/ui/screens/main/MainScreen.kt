@@ -31,6 +31,7 @@ import com.example.ktorclientapp.ui.screens.viewUser.ranking.RankingViewModel
 
 @Composable
 fun MainScreen(idUser: Int, rol: String, alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
+    // Pestaña que se está viendo: 0 Jugar, 1 Ranking, 2 Perfil, 3 Admin
     var pestana by remember { mutableStateOf(0) }
     val perfilViewModel: PerfilViewModel = viewModel()
     val rankingViewModel: RankingViewModel = viewModel()
@@ -83,6 +84,7 @@ fun MainScreen(idUser: Int, rol: String, alCerrarSesion: () -> Unit, modifier: M
             }
         }
     ) { innerPadding ->
+        // Según la pestaña elegida enseñamos una pantalla u otra
         Column(
             modifier = Modifier
                 .fillMaxSize()

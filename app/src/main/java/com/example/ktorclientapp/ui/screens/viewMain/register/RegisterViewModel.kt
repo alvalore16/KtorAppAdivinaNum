@@ -30,6 +30,7 @@ class RegisterViewModel(
         fechaNacimiento: String,
         alExito: () -> Unit
     ) {
+        // Si las contraseñas no coinciden ni llamamos al servidor
         if (contrasena != confirmacion) {
             _error.value = "Las contraseñas no coinciden"
             return
@@ -40,16 +41,17 @@ class RegisterViewModel(
             _error.value = null
 
             try {
-                repositorio.createUser(
-                    User(
-                        name = nombre.trim(),
-                        email = correo.trim(),
-                        password = contrasena.toMd5(),
-                        fechaNacimiento = fechaNacimiento
-                    )
+                // La contraseña se guarda ya en md5, el rol lo pone el servidor
+                val nuevo = User(
+                    name = nombre.trim(),
+                    email = correo.trim(),
+                    password = contrasena.toMd5(),
+                    fechaNacimiento = fechaNacimiento
                 )
+                repositorio.createUser(nuevo)
                 alExito()
             } catch (e: ClientRequestException) {
+                // Por ejemplo, si el correo o el nombre ya existen
                 _error.value = e.response.bodyAsText()
             } catch (e: Exception) {
                 _error.value = "No se pudo completar el registro"

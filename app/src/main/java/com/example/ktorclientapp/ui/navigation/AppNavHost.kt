@@ -13,12 +13,14 @@ import com.example.ktorclientapp.ui.screens.main.MainScreen
 import com.example.ktorclientapp.ui.screens.viewMain.recuperar.RecuperarScreen
 import com.example.ktorclientapp.ui.screens.viewMain.register.RegisterScreen
 
+// Aquí tenemos todas las rutas de la app juntas
 object Rutas {
     const val INICIO_SESION = "inicioSesion"
     const val REGISTRO = "registro"
     const val RECUPERAR = "recuperar"
     const val PRINCIPAL = "principal/{idUser}/{rol}"
 
+    // La ruta principal lleva el id y el rol dentro
     fun principal(idUser: Int, rol: String): String {
         return "principal/$idUser/$rol"
     }
@@ -37,6 +39,7 @@ fun AppNavHost(
         composable(Rutas.INICIO_SESION) {
             LoginScreen(
                 alIniciarSesion = { idUser, rol ->
+                    // Al entrar borramos el login de la pila para que atrás no vuelva a él
                     navController.navigate(Rutas.principal(idUser, rol)) {
                         popUpTo(Rutas.INICIO_SESION) { inclusive = true }
                     }
@@ -70,6 +73,7 @@ fun AppNavHost(
                 navArgument("rol") { type = NavType.StringType }
             )
         ) { entrada ->
+            // Sacamos el id y el rol de la ruta
             val argumentos = entrada.arguments
             var idUser = 0
             // Si por lo que sea no llega el rol, lo tratamos como un GAMER normal

@@ -45,9 +45,10 @@ fun RegisterScreen(
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var confirmacion by remember { mutableStateOf("") }
+    // Para abrir y cerrar el calendario
     var mostrarCalendario by remember { mutableStateOf(false) }
 
-    // La fecha viene del calendario en milisegundos; la pasamos a texto dd/MM/yyyy
+    // El calendario nos da la fecha en milisegundos, la pasamos a texto dd/MM/yyyy
     val estadoFecha = rememberDatePickerState()
     val milisegundos = estadoFecha.selectedDateMillis
 
@@ -66,6 +67,13 @@ fun RegisterScreen(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center
     ) {
+        Text(
+            text = "Crear cuenta",
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(Modifier.height(16.dp))
+
         OutlinedTextField(
             value = nombre,
             onValueChange = { nombre = it },
@@ -135,6 +143,7 @@ fun RegisterScreen(
                         alRegistrarse
                     )
                 },
+                // No dejamos pulsar hasta que todo esté relleno
                 enabled = nombre.isNotBlank() && correo.isNotBlank() && contrasena.isNotBlank()
                         && confirmacion.isNotBlank() && fechaNacimiento.isNotBlank(),
                 modifier = Modifier.fillMaxWidth()
@@ -158,6 +167,7 @@ fun RegisterScreen(
         }
     }
 
+    // ---------- CALENDARIO ----------
     if (mostrarCalendario) {
         DatePickerDialog(
             onDismissRequest = { mostrarCalendario = false },

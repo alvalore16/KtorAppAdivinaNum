@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -36,25 +37,7 @@ fun LoginScreen(
     val cargando by viewModel.cargando.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    LoginContenido(
-        cargando = cargando,
-        error = error,
-        alEntrar = { correo, contrasena -> viewModel.iniciarSesion(correo, contrasena, alIniciarSesion) },
-        irRegistro = irRegistro,
-        irRecuperar = irRecuperar,
-        modifier = modifier
-    )
-}
-
-@Composable
-private fun LoginContenido(
-    cargando: Boolean,
-    error: String?,
-    alEntrar: (String, String) -> Unit,
-    irRegistro: () -> Unit,
-    irRecuperar: () -> Unit,
-    modifier: Modifier = Modifier
-) {
+    // Lo que el usuario va escribiendo
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
 
@@ -66,8 +49,8 @@ private fun LoginContenido(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Login",
-            style = MaterialTheme.typography.headlineSmall
+            text = "Iniciar sesión",
+            style = MaterialTheme.typography.headlineMedium
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -93,37 +76,38 @@ private fun LoginContenido(
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // Mientras carga enseñamos la ruedita en vez del botón
         if (cargando) {
             CircularProgressIndicator()
         } else {
             Button(
-                onClick = { alEntrar(correo, contrasena) },
+                onClick = { viewModel.iniciarSesion(correo, contrasena, alIniciarSesion) },
                 enabled = correo.isNotBlank() && contrasena.isNotBlank(),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Login")
+                Text("Entrar")
             }
         }
 
         if (error != null) {
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = error, color = MaterialTheme.colorScheme.error)
+            Text(text = error!!, color = MaterialTheme.colorScheme.error)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
+        OutlinedButton(
             onClick = irRegistro,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Registro")
+            Text("Crear una cuenta")
         }
 
         TextButton(
             onClick = irRecuperar,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "¿Has olvidado tu contraseña?")
+            Text("¿Has olvidado tu contraseña?")
         }
     }
 }

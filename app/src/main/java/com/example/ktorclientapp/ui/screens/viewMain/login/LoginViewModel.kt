@@ -19,15 +19,19 @@ class LoginViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
+    // alExito nos dice a dónde ir cuando el login es correcto (id y rol del usuario)
     fun iniciarSesion(correo: String, contrasena: String, alExito: (Int, String) -> Unit) {
         viewModelScope.launch {
             _cargando.value = true
             _error.value = null
 
             try {
-                // PROVISIONAL: se comprueba aquí porque el servidor aún no tiene /login
-                val usuario = repositorio.getUsers()
-                    .find { it.email == correo.trim() && it.password == contrasena.toMd5() }
+                // Por ahora el servidor no tiene /login, así que traemos los usuarios
+                // y buscamos el que tenga ese correo y esa contraseña (en md5)
+                val usuarios = repositorio.getUsers()
+                val usuario = usuarios.find {
+                    it.email == correo.trim() && it.password == contrasena.toMd5()
+                }
 
                 if (usuario != null) {
                     alExito(usuario.idUser, usuario.rol)
@@ -43,6 +47,7 @@ class LoginViewModel(
     }
 }
 
+// Pasa un texto a md5, es la misma función que vimos en clase
 fun String.toMd5(): String {
     val md = MessageDigest.getInstance("MD5")
     val digested = md.digest(this.byteInputStream().readBytes())
