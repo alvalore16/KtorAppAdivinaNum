@@ -16,12 +16,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ktorclientapp.R
 import com.example.ktorclientapp.ui.screens.juego.JuegoScreen
+import com.example.ktorclientapp.ui.screens.perfil.PerfilScreen
+import com.example.ktorclientapp.ui.screens.perfil.PerfilViewModel
 
 @Composable
 fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
     var pestana by remember { mutableStateOf(0) }
+    val perfilViewModel: PerfilViewModel = viewModel()
 
     Scaffold(
         modifier = modifier,
@@ -41,7 +45,10 @@ fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Mod
                 )
                 NavigationBarItem(
                     selected = pestana == 2,
-                    onClick = { pestana = 2 },
+                    onClick = {
+                        pestana = 2
+                        perfilViewModel.cargarPerfil(idUser)
+                    },
                     icon = { Icon(painter = painterResource(R.drawable.ic_perfil), contentDescription = "Perfil") },
                     label = { Text("Perfil") }
                 )
@@ -60,10 +67,11 @@ fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Mod
                 Text("Aquí irá el ranking")
             }
             if (pestana == 2) {
-                Text("Aquí irá el perfil")
-                Button(onClick = alCerrarSesion) {
-                    Text("Cerrar sesión")
-                }
+                PerfilScreen(
+                    idUser = idUser,
+                    viewModel = perfilViewModel,
+                    alCerrarSesion = alCerrarSesion
+                )
             }
         }
     }

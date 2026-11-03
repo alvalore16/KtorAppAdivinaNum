@@ -12,6 +12,11 @@ data class User(
     val games: Int = 0,
     val wins: Int = 0
 )
+@Serializable
+data class CambioPassword(
+    val passwordActual: String = "",
+    val passwordNueva: String = ""
+)
 
 @Serializable
 data class Games(

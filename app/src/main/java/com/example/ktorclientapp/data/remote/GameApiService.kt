@@ -1,5 +1,6 @@
 package com.example.ktorclientapp.data.remote
 
+import com.example.ktorclientapp.data.model.CambioPassword
 import com.example.ktorclientapp.data.model.Games
 import com.example.ktorclientapp.data.model.Intento
 import com.example.ktorclientapp.data.model.RespuestaIntento
@@ -9,6 +10,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -54,4 +56,11 @@ class GameApiService(
             contentType(ContentType.Application.Json)
             setBody(Intento(numero))
         }.body()
+
+    suspend fun cambiarPassword(idUser: Int, cambio: CambioPassword) {
+        client.put("$baseUrl/usuarios/$idUser/password") {
+            contentType(ContentType.Application.Json)
+            setBody(cambio)
+        }
+    }
 }
