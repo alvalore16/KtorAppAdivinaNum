@@ -144,8 +144,7 @@ fun RegisterScreen(
                     )
                 },
                 // No dejamos pulsar hasta que todo esté relleno
-                enabled = nombre.isNotBlank() && correo.isNotBlank() && contrasena.isNotBlank()
-                        && confirmacion.isNotBlank() && fechaNacimiento.isNotBlank(),
+                enabled = nombre.isNotBlank() && correo.isNotBlank() && contrasena.isNotBlank() && confirmacion.isNotBlank() && fechaNacimiento.isNotBlank(),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Registrarse")

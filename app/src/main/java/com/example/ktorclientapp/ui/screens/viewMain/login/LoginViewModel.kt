@@ -40,7 +40,7 @@ class LoginViewModel(
     }
 }
 
-// Pasa un texto a md5, es la misma función que vimos en clase
+// Pasa un texto a md5
 fun String.toMd5(): String {
     val md = MessageDigest.getInstance("MD5")
     val digested = md.digest(this.byteInputStream().readBytes())

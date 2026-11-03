@@ -2,7 +2,7 @@ package com.example.ktorclientapp.ui.screens.viewUser.ranking
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ktorclientapp.data.model.RankingItem
+import com.example.ktorclientapp.data.model.Ranking
 import com.example.ktorclientapp.data.repository.GameRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,8 +14,8 @@ class RankingViewModel(
 ) : ViewModel() {
 
     // Jugadores ya ordenados, el servidor nos los manda en orden
-    private val _ranking = MutableStateFlow<List<RankingItem>>(emptyList())
-    val ranking: StateFlow<List<RankingItem>> = _ranking.asStateFlow()
+    private val _ranking = MutableStateFlow<List<Ranking>>(emptyList())
+    val ranking: StateFlow<List<Ranking>> = _ranking.asStateFlow()
 
     private val _cargando = MutableStateFlow(false)
     val cargando: StateFlow<Boolean> = _cargando.asStateFlow()

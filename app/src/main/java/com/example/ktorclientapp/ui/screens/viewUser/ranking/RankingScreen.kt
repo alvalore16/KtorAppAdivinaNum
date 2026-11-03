@@ -23,7 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.ktorclientapp.data.model.RankingItem
+import com.example.ktorclientapp.data.model.Ranking
 
 @Composable
 fun RankingScreen(
@@ -76,7 +76,7 @@ fun RankingScreen(
 }
 
 @Composable
-private fun TarjetaJugador(posicion: Int, jugador: RankingItem) {
+private fun TarjetaJugador(posicion: Int, jugador: Ranking) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.padding(12.dp),

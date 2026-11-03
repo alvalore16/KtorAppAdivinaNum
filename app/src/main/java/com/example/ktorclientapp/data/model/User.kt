@@ -27,47 +27,13 @@ data class CambioFoto(
 )
 
 @Serializable
-data class Games(
-    val idGames: Int = 0,
-    val idUser: Int = 0,
-    val intentos: Int = 0,
-    val numOculto: Int = 0,
-    val activa: Boolean = false,
-    val ganado: Boolean = false,
-    val pistas: Boolean = false,
-    val limitarIntentos: Boolean = false,
-    val maxIntentos: Int = 0
-)
-
-@Serializable
-data class Intento(
-    val numero: Int = 0
-)
-
-@Serializable
-data class RespuestaIntento(
-    val resultado: String = "",
-    val partida: Games = Games()
-)
-
-@Serializable
-data class RankingItem(
-    val idUser: Int = 0,
-    val name: String = "",
-    val foto: String = "",
-    val jugadas: Int = 0,
-    val ganadas: Int = 0,
-    val porcentaje: Double = 0.0
+data class CambioRol(
+    val rol: String = ""
 )
 
 @Serializable
 data class RecuperarPassword(
     val email: String = ""
-)
-
-@Serializable
-data class CambioRol(
-    val rol: String = ""
 )
 
 @Serializable

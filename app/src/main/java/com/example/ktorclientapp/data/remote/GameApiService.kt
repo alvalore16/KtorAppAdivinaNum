@@ -6,7 +6,7 @@ import com.example.ktorclientapp.data.model.CambioRol
 import com.example.ktorclientapp.data.model.Games
 import com.example.ktorclientapp.data.model.Intento
 import com.example.ktorclientapp.data.model.Login
-import com.example.ktorclientapp.data.model.RankingItem
+import com.example.ktorclientapp.data.model.Ranking
 import com.example.ktorclientapp.data.model.RecuperarPassword
 import com.example.ktorclientapp.data.model.RespuestaIntento
 import com.example.ktorclientapp.data.model.RespuestaLogin
@@ -32,7 +32,7 @@ class GameApiService(
             setBody(datos)
         }.body()
 
-    suspend fun getRanking(): List<RankingItem> = client.get("$baseUrl/ranking").body()
+    suspend fun getRanking(): List<Ranking> = client.get("$baseUrl/ranking").body()
 
     suspend fun getUsers(): List<User> = client.get("$baseUrl/usuarios").body()
 
@@ -50,8 +50,7 @@ class GameApiService(
             setBody(partida)
         }.body()
 
-    suspend fun getPartidaActiva(idUser: Int): Games =
-        client.get("$baseUrl/usuarios/$idUser/partida-activa").body()
+    suspend fun getPartidaActiva(idUser: Int): Games = client.get("$baseUrl/usuarios/$idUser/partida-activa").body()
 
     suspend fun enviarIntento(idPartida: Int, numero: Int): RespuestaIntento =
         client.post("$baseUrl/partidas/$idPartida/intentos") {

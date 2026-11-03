@@ -23,6 +23,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,7 +49,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(idUser: Int, rol: String, alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
     // Pestaña que se está viendo: 0 Jugar, 1 Ranking, 2 Perfil, 3 Admin
-    var pestana by remember { mutableStateOf(0) }
+    var pestana by remember { mutableIntStateOf(0) }
     val perfilViewModel: PerfilViewModel = viewModel()
     val rankingViewModel: RankingViewModel = viewModel()
     val adminViewModel: AdminViewModel = viewModel()

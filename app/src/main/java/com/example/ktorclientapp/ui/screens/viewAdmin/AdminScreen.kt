@@ -199,9 +199,7 @@ private fun FormularioUsuario(
     var esAdmin by remember { mutableStateOf(usuario != null && usuario.rol == "ADMIN") }
 
     // La contraseña solo hace falta al crear un usuario nuevo
-    val datosCompletos = nombre.isNotBlank() &&
-            correo.isNotBlank() &&
-            (usuario != null || contrasena.isNotBlank())
+    val datosCompletos = nombre.isNotBlank() && correo.isNotBlank() && (usuario != null || contrasena.isNotBlank())
 
     AlertDialog(
         onDismissRequest = onCancelar,
