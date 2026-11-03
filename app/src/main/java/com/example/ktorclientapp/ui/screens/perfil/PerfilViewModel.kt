@@ -1,17 +1,13 @@
 package com.example.ktorclientapp.ui.screens.perfil
 
-import android.content.ContentResolver
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktorclientapp.data.model.CambioFoto
 import com.example.ktorclientapp.data.model.CambioPassword
 import com.example.ktorclientapp.data.model.User
 import com.example.ktorclientapp.data.repository.GameRepository
-import com.example.ktorclientapp.data.repository.ImageRepository
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.statement.bodyAsText
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,16 +24,10 @@ class PerfilViewModel(
     private val _mensaje = MutableStateFlow("")
     val mensaje: StateFlow<String> = _mensaje.asStateFlow()
 
-    // Indica si la subida de la foto está en curso
-    private val _subiendo = MutableStateFlow(false)
-    val subiendo: StateFlow<Boolean> = _subiendo.asStateFlow()
-
     fun cargarPerfil(idUser: Int) {
         viewModelScope.launch {
             try {
                 _usuario.value = repositorio.getUserById(idUser)
-            } catch (e: CancellationException) {
-                throw e
             } catch (e: Exception) {
                 _mensaje.value = "No se pudo cargar el perfil"
             }
@@ -76,8 +66,6 @@ class PerfilViewModel(
                     _usuario.value = usuarioActual.copy(foto = url)
                 }
                 _mensaje.value = "Foto de perfil guardada"
-            } catch (e: CancellationException) {
-                throw e
             } catch (e: Exception) {
                 _mensaje.value = "No se pudo guardar la foto en el servidor"
             }

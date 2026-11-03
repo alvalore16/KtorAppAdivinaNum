@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktorclientapp.data.model.RankingItem
 import com.example.ktorclientapp.data.repository.GameRepository
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,8 +24,6 @@ class RankingViewModel(
             try {
                 _ranking.value = repositorio.getRanking()
                 _mensaje.value = ""
-            } catch (e: CancellationException) {
-                throw e
             } catch (e: Exception) {
                 _mensaje.value = "No se pudo cargar el ranking"
             }

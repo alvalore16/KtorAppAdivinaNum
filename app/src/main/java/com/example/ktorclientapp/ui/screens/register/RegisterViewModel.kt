@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktorclientapp.data.model.User
 import com.example.ktorclientapp.data.repository.GameRepository
-import kotlinx.coroutines.CancellationException
+import com.example.ktorclientapp.ui.screens.login.toMd5
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +20,19 @@ class RegisterViewModel(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error.asStateFlow()
 
-    fun registrar(nombre: String, correo: String, contrasena: String, alExito: () -> Unit) {
+    fun registrar(
+        nombre: String,
+        correo: String,
+        contrasena: String,
+        confirmacion: String,
+        fechaNacimiento: String,
+        alExito: () -> Unit
+    ) {
+        if (contrasena != confirmacion) {
+            _error.value = "Las contraseñas no coinciden"
+            return
+        }
+
         viewModelScope.launch {
             _cargando.value = true
             _error.value = null
@@ -30,12 +42,11 @@ class RegisterViewModel(
                     User(
                         name = nombre.trim(),
                         email = correo.trim(),
-                        password = contrasena
+                        password = contrasena.toMd5(),
+                        fechaNacimiento = fechaNacimiento
                     )
                 )
                 alExito()
-            } catch (e: CancellationException) {
-                throw e
             } catch (e: Exception) {
                 _error.value = "No se pudo completar el registro"
             } finally {

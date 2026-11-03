@@ -7,7 +7,6 @@ import com.example.ktorclientapp.data.model.Intento
 import com.example.ktorclientapp.data.model.RankingItem
 import com.example.ktorclientapp.data.model.RespuestaIntento
 import com.example.ktorclientapp.data.model.User
-import com.example.ktorclientapp.data.model.UserWithGame
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -27,23 +26,10 @@ class GameApiService(
 
     suspend fun getUserById(id: Int): User = client.get("$baseUrl/usuarios/$id").body()
 
-    suspend fun getUserWithGames(id: Int): UserWithGame =
-        client.get("$baseUrl/usuarios/$id/games").body()
-
     suspend fun createUser(user: User): User =
         client.post("$baseUrl/usuarios") {
             contentType(ContentType.Application.Json)
             setBody(user)
-        }.body()
-
-    suspend fun getGames(): List<Games> = client.get("$baseUrl/games").body()
-
-    suspend fun getGameById(id: Int): Games = client.get("$baseUrl/games/$id").body()
-
-    suspend fun createGame(game: Games): Games =
-        client.post("$baseUrl/games") {
-            contentType(ContentType.Application.Json)
-            setBody(game)
         }.body()
 
     suspend fun crearPartida(partida: Games): Games =

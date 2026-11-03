@@ -47,7 +47,8 @@ fun AppNavHost(
 
         composable(Rutas.REGISTRO) {
             RegisterScreen(
-                alRegistrarse = { navController.popBackStack() }
+                alRegistrarse = { navController.popBackStack() },
+                alVolver = { navController.popBackStack() }
             )
         }
 

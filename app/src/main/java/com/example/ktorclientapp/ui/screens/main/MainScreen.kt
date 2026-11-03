@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -53,7 +52,7 @@ fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Mod
                     onClick = {
                         pestana = 1
                         rankingViewModel.cargarRanking()
-                              },
+                    },
                     icon = { Icon(painter = painterResource(R.drawable.ic_ranking), contentDescription = "Ranking") },
                     label = { Text("Ranking") }
                 )

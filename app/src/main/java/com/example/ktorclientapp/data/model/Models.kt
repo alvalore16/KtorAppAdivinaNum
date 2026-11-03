@@ -11,13 +11,16 @@ data class User(
     val password: String = "",
     val games: Int = 0,
     val wins: Int = 0,
-    val foto: String = ""
+    val foto: String = "",
+    val fechaNacimiento: String = ""
 )
+
 @Serializable
 data class CambioPassword(
     val passwordActual: String = "",
     val passwordNueva: String = ""
 )
+
 @Serializable
 data class CambioFoto(
     val url: String = ""
@@ -47,12 +50,6 @@ data class RespuestaIntento(
     val partida: Games = Games()
 )
 
-@Serializable
-data class UserWithGame(
-    val id: Int = 0,
-    val name: String = "",
-    val games: List<Games> = emptyList()
-)
 @Serializable
 data class RankingItem(
     val idUser: Int = 0,

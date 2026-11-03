@@ -37,7 +37,7 @@ fun LoginScreen(
     LoginContenido(
         cargando = cargando,
         error = error,
-        alEntrar = { correo, contrasena -> viewModel.iniciarSesion(correo, contrasena, alIniciarSesion)},
+        alEntrar = { correo, contrasena -> viewModel.iniciarSesion(correo, contrasena, alIniciarSesion) },
         irRegistro = irRegistro,
         modifier = modifier
     )

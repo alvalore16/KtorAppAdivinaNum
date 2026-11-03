@@ -7,11 +7,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,16 +30,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import java.text.SimpleDateFormat
+import java.util.Date
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     alRegistrarse: () -> Unit,
+    alVolver: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RegisterViewModel = viewModel()
 ) {
     var nombre by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
+    var confirmacion by remember { mutableStateOf("") }
+    var mostrarCalendario by remember { mutableStateOf(false) }
+
+    // La fecha viene del calendario en milisegundos; la pasamos a texto dd/MM/yyyy
+    val estadoFecha = rememberDatePickerState()
+    val milisegundos = estadoFecha.selectedDateMillis
+
+    var fechaNacimiento = ""
+    if (milisegundos != null) {
+        fechaNacimiento = SimpleDateFormat("dd/MM/yyyy").format(Date(milisegundos))
+    }
 
     val cargando by viewModel.cargando.collectAsState()
     val error by viewModel.error.collectAsState()
@@ -39,7 +62,8 @@ fun RegisterScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(24.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center
     ) {
         OutlinedTextField(
@@ -71,23 +95,84 @@ fun RegisterScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(Modifier.height(8.dp))
+
+        OutlinedTextField(
+            value = confirmacion,
+            onValueChange = { confirmacion = it },
+            label = { Text("Confirmar contraseña") },
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        OutlinedButton(
+            onClick = { mostrarCalendario = true },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if (fechaNacimiento == "") {
+                Text("Elegir fecha de nacimiento")
+            } else {
+                Text("Fecha de nacimiento: $fechaNacimiento")
+            }
+        }
+
         Spacer(Modifier.height(16.dp))
 
         if (cargando) {
             CircularProgressIndicator()
         } else {
             Button(
-                onClick = { viewModel.registrar(nombre, correo, contrasena, alRegistrarse) },
-                enabled = nombre.isNotBlank() && correo.isNotBlank() && contrasena.isNotBlank(),
+                onClick = {
+                    viewModel.registrar(
+                        nombre,
+                        correo,
+                        contrasena,
+                        confirmacion,
+                        fechaNacimiento,
+                        alRegistrarse
+                    )
+                },
+                enabled = nombre.isNotBlank() && correo.isNotBlank() && contrasena.isNotBlank()
+                        && confirmacion.isNotBlank() && fechaNacimiento.isNotBlank(),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Registrarse")
             }
         }
 
+        Spacer(Modifier.height(8.dp))
+
+        TextButton(
+            onClick = alVolver,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Volver al inicio de sesión")
+        }
+
         if (error != null) {
             Spacer(Modifier.height(8.dp))
             Text(text = error!!, color = MaterialTheme.colorScheme.error)
+        }
+    }
+
+    if (mostrarCalendario) {
+        DatePickerDialog(
+            onDismissRequest = { mostrarCalendario = false },
+            confirmButton = {
+                TextButton(onClick = { mostrarCalendario = false }) {
+                    Text("Aceptar")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { mostrarCalendario = false }) {
+                    Text("Cancelar")
+                }
+            }
+        ) {
+            DatePicker(state = estadoFecha)
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.ktorclientapp.ui.screens.juego
 
-import android.util.Log.e
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktorclientapp.data.model.Games
@@ -8,7 +7,6 @@ import com.example.ktorclientapp.data.repository.GameRepository
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,8 +33,6 @@ class JuegoViewModel(private val repositorio: GameRepository = GameRepository())
                 )
                 _partida.value = repositorio.crearPartida(nueva)
                 _mensaje.value = "Adivina el número"
-            } catch (e: CancellationException) {
-                throw e
             } catch (e: ClientRequestException) {
                 if (e.response.status == HttpStatusCode.Conflict) {
                     // Ya tiene una partida sin terminar: se continúa con ella
@@ -55,8 +51,6 @@ class JuegoViewModel(private val repositorio: GameRepository = GameRepository())
             try {
                 _partida.value = repositorio.getPartidaActiva(idUser)
                 _mensaje.value = "Tenías una partida sin terminar, sigue intentándolo"
-            } catch (e: CancellationException) {
-                throw e
             } catch (e: Exception) {
                 _mensaje.value = "No se pudo recuperar la partida"
             }
@@ -81,24 +75,14 @@ class JuegoViewModel(private val repositorio: GameRepository = GameRepository())
                 _partida.value = respuesta.partida
 
                 when (respuesta.resultado) {
-                    "ACERTADO" -> {
-                        _mensaje.value = "¡Has acertado!"
-                    }
-                    "PERDIDO" -> {
-                        _mensaje.value = "Sin intentos. El número era ${respuesta.partida.numOculto}"
-                    }
-                    "MAYOR" -> {
-                        _mensaje.value = "El número secreto es mayor que $numero"
-                    }
-                    "MENOR" -> {
-                        _mensaje.value = "El número secreto es menor que $numero"
-                    }
-                    else -> {
-                        _mensaje.value = "No has acertado, sigue intentándolo"
-                    }
+                    "ACERTADO" -> _mensaje.value = "¡Has acertado!"
+                    "PERDIDO" -> _mensaje.value = "Sin intentos. El número era ${respuesta.partida.numOculto}"
+                    "MAYOR" -> _mensaje.value = "El número secreto es mayor que $numero"
+                    "MENOR" -> _mensaje.value = "El número secreto es menor que $numero"
+                    else -> _mensaje.value = "No has acertado, sigue intentándolo"
                 }
             } catch (e: Exception) {
-                _mensaje.value = "Error: ${e.message}"
+                _mensaje.value = "No se pudo enviar el intento"
             }
         }
     }
