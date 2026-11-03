@@ -10,12 +10,17 @@ data class User(
     val email: String = "",
     val password: String = "",
     val games: Int = 0,
-    val wins: Int = 0
+    val wins: Int = 0,
+    val foto: String = ""
 )
 @Serializable
 data class CambioPassword(
     val passwordActual: String = "",
     val passwordNueva: String = ""
+)
+@Serializable
+data class CambioFoto(
+    val url: String = ""
 )
 
 @Serializable

@@ -1,5 +1,6 @@
 package com.example.ktorclientapp.data.repository
 
+import com.example.ktorclientapp.data.model.CambioFoto
 import com.example.ktorclientapp.data.model.CambioPassword
 import com.example.ktorclientapp.data.model.Games
 import com.example.ktorclientapp.data.model.RespuestaIntento
@@ -31,4 +32,6 @@ class GameRepository(
     suspend fun enviarIntento(idPartida: Int, numero: Int): RespuestaIntento = apiService.enviarIntento(idPartida, numero)
 
     suspend fun cambiarPassword(idUser: Int, cambio: CambioPassword) = apiService.cambiarPassword(idUser, cambio)
+
+    suspend fun cambiarFoto(idUser: Int, cambio: CambioFoto) = apiService.cambiarFoto(idUser, cambio)
 }

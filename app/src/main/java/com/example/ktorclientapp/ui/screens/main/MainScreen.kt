@@ -1,5 +1,6 @@
 package com.example.ktorclientapp.ui.screens.main
 
+import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,10 +16,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ktorclientapp.R
 import com.example.ktorclientapp.ui.screens.juego.JuegoScreen
+import com.example.ktorclientapp.ui.screens.perfil.ImageViewModel
+import com.example.ktorclientapp.ui.screens.perfil.ImageViewModelFactory
 import com.example.ktorclientapp.ui.screens.perfil.PerfilScreen
 import com.example.ktorclientapp.ui.screens.perfil.PerfilViewModel
 
@@ -26,6 +30,10 @@ import com.example.ktorclientapp.ui.screens.perfil.PerfilViewModel
 fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Modifier) {
     var pestana by remember { mutableStateOf(0) }
     val perfilViewModel: PerfilViewModel = viewModel()
+    val contexto = LocalContext.current
+    val imageViewModel: ImageViewModel = viewModel(
+        factory = ImageViewModelFactory(contexto.applicationContext as Application)
+    )
 
     Scaffold(
         modifier = modifier,
@@ -70,6 +78,7 @@ fun MainScreen(idUser: Int, alCerrarSesion: () -> Unit, modifier: Modifier = Mod
                 PerfilScreen(
                     idUser = idUser,
                     viewModel = perfilViewModel,
+                    imageViewModel = imageViewModel,
                     alCerrarSesion = alCerrarSesion
                 )
             }

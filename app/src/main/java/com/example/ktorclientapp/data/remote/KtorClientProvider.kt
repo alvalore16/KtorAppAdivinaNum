@@ -10,7 +10,7 @@ import kotlinx.serialization.json.Json
 
 object KtorClientProvider {
 
-    const val BASE_URL = "http://localhost:8090"
+    const val BASE_URL = "http://192.168.209.44:8090"
     // const val BASE_URL_LOCAL = "http://10.0.2.2:8080/posts" // Emulador -> tu backend local en el puerto 8080
     // const val BASE_URL_LOCAL = "http://192.168.1.100:8080" // Dispositivo físico en la misma red Wi-Fi
 

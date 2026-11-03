@@ -35,7 +35,7 @@ class LoginViewModel(
                     _error.value = "Correo o contraseña incorrectos"
                 }
             } catch (e: Exception) {
-                _error.value = "Error: ${e.message}"
+                _error.value = "No se pudo conectar con el servidor"
             } finally {
                 _cargando.value = false
             }
