@@ -34,9 +34,9 @@ class GameRepository(
 
     suspend fun crearUsuarioAdmin(user: User) = apiService.crearUsuarioAdmin(user)
 
-    suspend fun editarUsuario(idUser: Int, user: User) = apiService.editarUsuario(idUser, user)
+    suspend fun actualizarUsuario(idUser: Int, user: User) = apiService.actualizarUsuario(idUser, user)
 
     suspend fun cambiarRol(idUser: Int, cambio: CambioRol) = apiService.cambiarRol(idUser, cambio)
 
-    suspend fun borrarUsuario(idUser: Int) = apiService.borrarUsuario(idUser)
+    suspend fun eliminarUsuario(idUser: Int) = apiService.eliminarUsuario(idUser)
 }

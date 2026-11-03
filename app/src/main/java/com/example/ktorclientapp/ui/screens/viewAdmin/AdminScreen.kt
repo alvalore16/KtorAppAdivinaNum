@@ -11,7 +11,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -35,14 +37,17 @@ fun AdminScreen(
     modifier: Modifier = Modifier
 ) {
     val usuarios by viewModel.usuarios.collectAsState()
-    val mensaje by viewModel.mensaje.collectAsState()
+    val cargando by viewModel.cargando.collectAsState()
+    val error by viewModel.error.collectAsState()
 
-    var usuarioABorrar by remember { mutableStateOf<User?>(null) }
-    var usuarioEditando by remember { mutableStateOf<User?>(null) }
+    // Usuario que queremos eliminar.
+    // null significa que no hay ninguno seleccionado.
+    var usuarioAEliminar by remember { mutableStateOf<User?>(null) }
+
+    // Usuario que estamos editando.
+    // Si es null y el formulario está abierto, estamos creando uno nuevo.
+    var usuarioAEditar by remember { mutableStateOf<User?>(null) }
     var mostrarFormulario by remember { mutableStateOf(false) }
-
-    val borrar = usuarioABorrar
-    val editando = usuarioEditando
 
     Column(
         modifier = modifier
@@ -50,11 +55,15 @@ fun AdminScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text("Administración", style = MaterialTheme.typography.headlineMedium)
+
+        Text(
+            text = "Administración de usuarios",
+            style = MaterialTheme.typography.headlineSmall
+        )
 
         Button(
             onClick = {
-                usuarioEditando = null
+                usuarioAEditar = null
                 mostrarFormulario = true
             },
             modifier = Modifier.fillMaxWidth()
@@ -62,15 +71,40 @@ fun AdminScreen(
             Text("Nuevo usuario")
         }
 
-        if (mensaje != "") {
-            Text(mensaje)
+        if (cargando) {
+            CircularProgressIndicator()
         }
 
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(usuarios) { usuario ->
-                Card(modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text(usuario.name, style = MaterialTheme.typography.titleMedium)
+        if (error != null) {
+            Text(
+                text = error!!,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(
+                items = usuarios,
+                key = { usuario -> usuario.idUser }
+            ) { usuario ->
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 4.dp
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Text(
+                            text = usuario.name,
+                            style = MaterialTheme.typography.titleLarge
+                        )
                         Text(usuario.email)
                         Text("Rol: ${usuario.rol}")
 
@@ -83,7 +117,8 @@ fun AdminScreen(
                             }
                             TextButton(
                                 onClick = {
-                                    usuarioEditando = usuario
+                                    // Guardamos el usuario que vamos a editar
+                                    usuarioAEditar = usuario
                                     mostrarFormulario = true
                                 },
                                 modifier = Modifier.weight(1f)
@@ -91,10 +126,13 @@ fun AdminScreen(
                                 Text("Editar")
                             }
                             TextButton(
-                                onClick = { usuarioABorrar = usuario },
+                                onClick = {
+                                    // Guardamos el usuario que queremos eliminar
+                                    usuarioAEliminar = usuario
+                                },
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text("Borrar")
+                                Text("Eliminar")
                             }
                         }
                     }
@@ -103,43 +141,47 @@ fun AdminScreen(
         }
     }
 
-    // Confirmación antes de borrar
-    if (borrar != null) {
+    // ---------- ALERT DIALOG ----------
+    if (usuarioAEliminar != null) {
         AlertDialog(
-            onDismissRequest = { usuarioABorrar = null },
-            title = { Text("Borrar usuario") },
-            text = { Text("¿Seguro que quieres borrar a ${borrar.name}? También se borrarán sus partidas.") },
+            onDismissRequest = { usuarioAEliminar = null },
+            title = { Text("Eliminar usuario") },
+            text = {
+                Text("¿Seguro que quieres eliminar a ${usuarioAEliminar!!.name}? También se borrarán sus partidas.")
+            },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        viewModel.borrar(borrar.idUser, idUser)
-                        usuarioABorrar = null
+                        // Eliminamos mediante el ViewModel
+                        viewModel.eliminarUsuario(usuarioAEliminar!!.idUser, idUser)
+                        // Cerramos el diálogo
+                        usuarioAEliminar = null
                     }
                 ) {
-                    Text("Borrar")
+                    Text("Eliminar")
                 }
             },
             dismissButton = {
-                TextButton(onClick = { usuarioABorrar = null }) {
+                TextButton(onClick = { usuarioAEliminar = null }) {
                     Text("Cancelar")
                 }
             }
         )
     }
 
-    // Formulario para crear (editando == null) o editar un usuario
+    // ---------- FORMULARIO (crear / editar) ----------
     if (mostrarFormulario) {
         FormularioUsuario(
-            usuario = editando,
-            alGuardar = { nombre, correo, contrasena, esAdmin ->
-                if (editando == null) {
-                    viewModel.crear(nombre, correo, contrasena, esAdmin)
+            usuario = usuarioAEditar,
+            onGuardar = { nombre, correo, contrasena, esAdmin ->
+                if (usuarioAEditar == null) {
+                    viewModel.crearUsuario(nombre, correo, contrasena, esAdmin)
                 } else {
-                    viewModel.editar(editando.idUser, nombre, correo, esAdmin)
+                    viewModel.actualizarUsuario(usuarioAEditar!!.idUser, nombre, correo, esAdmin)
                 }
                 mostrarFormulario = false
             },
-            alCancelar = { mostrarFormulario = false }
+            onCancelar = { mostrarFormulario = false }
         )
     }
 }
@@ -147,20 +189,29 @@ fun AdminScreen(
 @Composable
 private fun FormularioUsuario(
     usuario: User?,
-    alGuardar: (String, String, String, Boolean) -> Unit,
-    alCancelar: () -> Unit
+    onGuardar: (String, String, String, Boolean) -> Unit,
+    onCancelar: () -> Unit
 ) {
+    // Si estamos editando, rellenamos los campos con los datos del usuario
     var nombre by remember { mutableStateOf(if (usuario != null) usuario.name else "") }
     var correo by remember { mutableStateOf(if (usuario != null) usuario.email else "") }
     var contrasena by remember { mutableStateOf("") }
     var esAdmin by remember { mutableStateOf(usuario != null && usuario.rol == "ADMIN") }
 
-    // La contraseña solo se pide al crear
-    val datosCompletos = nombre.isNotBlank() && correo.isNotBlank() && (usuario != null || contrasena.isNotBlank())
+    // La contraseña solo hace falta al crear un usuario nuevo
+    val datosCompletos = nombre.isNotBlank() &&
+            correo.isNotBlank() &&
+            (usuario != null || contrasena.isNotBlank())
 
     AlertDialog(
-        onDismissRequest = alCancelar,
-        title = { Text(if (usuario == null) "Nuevo usuario" else "Editar usuario") },
+        onDismissRequest = onCancelar,
+        title = {
+            if (usuario == null) {
+                Text("Nuevo usuario")
+            } else {
+                Text("Editar usuario")
+            }
+        },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 OutlinedTextField(
@@ -169,12 +220,14 @@ private fun FormularioUsuario(
                     label = { Text("Nombre") },
                     singleLine = true
                 )
+
                 OutlinedTextField(
                     value = correo,
                     onValueChange = { correo = it },
                     label = { Text("Correo") },
                     singleLine = true
                 )
+
                 if (usuario == null) {
                     OutlinedTextField(
                         value = contrasena,
@@ -184,22 +237,26 @@ private fun FormularioUsuario(
                         visualTransformation = PasswordVisualTransformation()
                     )
                 }
+
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Checkbox(checked = esAdmin, onCheckedChange = { esAdmin = it })
+                    Checkbox(
+                        checked = esAdmin,
+                        onCheckedChange = { esAdmin = it }
+                    )
                     Text("Administrador")
                 }
             }
         },
         confirmButton = {
             TextButton(
-                onClick = { alGuardar(nombre, correo, contrasena, esAdmin) },
+                onClick = { onGuardar(nombre, correo, contrasena, esAdmin) },
                 enabled = datosCompletos
             ) {
                 Text("Guardar")
             }
         },
         dismissButton = {
-            TextButton(onClick = alCancelar) {
+            TextButton(onClick = onCancelar) {
                 Text("Cancelar")
             }
         }

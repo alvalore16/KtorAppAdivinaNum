@@ -71,6 +71,7 @@ class GameApiService(
         }
     }
 
+    // Crear usuario desde el panel de admin (el rol lo elige el admin)
     suspend fun crearUsuarioAdmin(user: User) {
         client.post("$baseUrl/admin/usuarios") {
             contentType(ContentType.Application.Json)
@@ -78,13 +79,15 @@ class GameApiService(
         }
     }
 
-    suspend fun editarUsuario(idUser: Int, user: User) {
+    // Cambiar nombre, correo y rol
+    suspend fun actualizarUsuario(idUser: Int, user: User) {
         client.put("$baseUrl/usuarios/$idUser") {
             contentType(ContentType.Application.Json)
             setBody(user)
         }
     }
 
+    // Solo cambia el rol
     suspend fun cambiarRol(idUser: Int, cambio: CambioRol) {
         client.put("$baseUrl/usuarios/$idUser/rol") {
             contentType(ContentType.Application.Json)
@@ -92,7 +95,8 @@ class GameApiService(
         }
     }
 
-    suspend fun borrarUsuario(idUser: Int) {
+    // El servidor también borra sus partidas
+    suspend fun eliminarUsuario(idUser: Int) {
         client.delete("$baseUrl/usuarios/$idUser")
     }
 }

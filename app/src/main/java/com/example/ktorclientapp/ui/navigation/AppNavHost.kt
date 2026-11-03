@@ -72,6 +72,7 @@ fun AppNavHost(
         ) { entrada ->
             val argumentos = entrada.arguments
             var idUser = 0
+            // Si por lo que sea no llega el rol, lo tratamos como un GAMER normal
             var rol = "GAMER"
             if (argumentos != null) {
                 idUser = argumentos.getInt("idUser")

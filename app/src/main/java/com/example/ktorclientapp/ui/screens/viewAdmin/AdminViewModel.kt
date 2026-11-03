@@ -17,23 +17,32 @@ class AdminViewModel(
     private val repositorio: GameRepository = GameRepository()
 ) : ViewModel() {
 
+    // Usuarios que se pintan en la lista
     private val _usuarios = MutableStateFlow<List<User>>(emptyList())
     val usuarios: StateFlow<List<User>> = _usuarios.asStateFlow()
 
-    private val _mensaje = MutableStateFlow("")
-    val mensaje: StateFlow<String> = _mensaje.asStateFlow()
+    private val _cargando = MutableStateFlow(false)
+    val cargando: StateFlow<Boolean> = _cargando.asStateFlow()
+
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error.asStateFlow()
 
     fun cargarUsuarios() {
         viewModelScope.launch {
+            _cargando.value = true
+            _error.value = null
+
             try {
                 _usuarios.value = repositorio.getUsers()
             } catch (e: Exception) {
-                _mensaje.value = "No se pudieron cargar los usuarios"
+                _error.value = "No se pudieron cargar los usuarios"
+            } finally {
+                _cargando.value = false
             }
         }
     }
 
-    // GAMER pasa a ADMIN y ADMIN pasa a GAMER
+    // Si es GAMER lo pasamos a ADMIN y al revés
     fun cambiarRol(usuario: User) {
         var nuevoRol = "ADMIN"
         if (usuario.rol == "ADMIN") {
@@ -41,86 +50,89 @@ class AdminViewModel(
         }
 
         viewModelScope.launch {
+            _error.value = null
+
             try {
                 repositorio.cambiarRol(usuario.idUser, CambioRol(nuevoRol))
-                _mensaje.value = "Rol cambiado"
                 cargarUsuarios()
             } catch (e: ClientRequestException) {
-                _mensaje.value = e.response.bodyAsText()
+                // El servidor explica qué ha fallado (por ejemplo, último admin)
+                _error.value = e.response.bodyAsText()
             } catch (e: Exception) {
-                _mensaje.value = "No se pudo conectar con el servidor"
+                _error.value = "No se pudo conectar con el servidor"
             }
         }
     }
 
-    fun borrar(idBorrar: Int, miId: Int) {
-        if (idBorrar == miId) {
-            _mensaje.value = "No puedes borrarte a ti mismo"
+    fun eliminarUsuario(id: Int, miId: Int) {
+        // Para no cargarnos nuestra propia cuenta
+        if (id == miId) {
+            _error.value = "No puedes eliminarte a ti mismo"
             return
         }
 
         viewModelScope.launch {
+            _error.value = null
+
             try {
-                repositorio.borrarUsuario(idBorrar)
-                _mensaje.value = "Usuario borrado"
+                repositorio.eliminarUsuario(id)
                 cargarUsuarios()
             } catch (e: ClientRequestException) {
-                _mensaje.value = e.response.bodyAsText()
+                _error.value = e.response.bodyAsText()
             } catch (e: Exception) {
-                _mensaje.value = "No se pudo conectar con el servidor"
+                _error.value = "No se pudo conectar con el servidor"
             }
         }
     }
 
-    fun crear(nombre: String, correo: String, contrasena: String, esAdmin: Boolean) {
+    fun crearUsuario(nombre: String, correo: String, contrasena: String, esAdmin: Boolean) {
         var rol = "GAMER"
         if (esAdmin) {
             rol = "ADMIN"
         }
 
         viewModelScope.launch {
+            _error.value = null
+
             try {
-                repositorio.crearUsuarioAdmin(
-                    User(
-                        name = nombre.trim(),
-                        email = correo.trim(),
-                        password = contrasena.toMd5(),
-                        rol = rol
-                    )
+                val usuario = User(
+                    name = nombre.trim(),
+                    email = correo.trim(),
+                    password = contrasena.toMd5(),
+                    rol = rol
                 )
-                _mensaje.value = "Usuario creado"
+                repositorio.crearUsuarioAdmin(usuario)
                 cargarUsuarios()
             } catch (e: ClientRequestException) {
-                _mensaje.value = e.response.bodyAsText()
+                _error.value = e.response.bodyAsText()
             } catch (e: Exception) {
-                _mensaje.value = "No se pudo conectar con el servidor"
+                _error.value = "No se pudo conectar con el servidor"
             }
         }
     }
 
-    fun editar(idUser: Int, nombre: String, correo: String, esAdmin: Boolean) {
+    fun actualizarUsuario(id: Int, nombre: String, correo: String, esAdmin: Boolean) {
         var rol = "GAMER"
         if (esAdmin) {
             rol = "ADMIN"
         }
 
         viewModelScope.launch {
+            _error.value = null
+
             try {
-                repositorio.editarUsuario(
-                    idUser,
-                    User(
-                        idUser = idUser,
-                        name = nombre.trim(),
-                        email = correo.trim(),
-                        rol = rol
-                    )
+                val usuario = User(
+                    idUser = id,
+                    name = nombre.trim(),
+                    email = correo.trim(),
+                    rol = rol
                 )
-                _mensaje.value = "Usuario actualizado"
+                repositorio.actualizarUsuario(id, usuario)
                 cargarUsuarios()
             } catch (e: ClientRequestException) {
-                _mensaje.value = e.response.bodyAsText()
+                _error.value = e.response.bodyAsText()
             } catch (e: Exception) {
-                _mensaje.value = "No se pudo conectar con el servidor"
+                _error.value = "No se pudo conectar con el servidor"
             }
         }
     }

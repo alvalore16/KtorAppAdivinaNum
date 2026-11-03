@@ -68,6 +68,7 @@ fun MainScreen(idUser: Int, rol: String, alCerrarSesion: () -> Unit, modifier: M
                     icon = { Icon(painter = painterResource(R.drawable.ic_perfil), contentDescription = "Perfil") },
                     label = { Text("Perfil") }
                 )
+                // La pestaña de admin solo la ve quien tiene rol ADMIN
                 if (rol == "ADMIN") {
                     NavigationBarItem(
                         selected = pestana == 3,
